@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP32 Car Control</title>
+</head>
+<body>
+  <h2>ESP32 Car Remote Control</h2>
+
+  <!-- Control buttons -->
+  <button onclick="sendCommand('forward')">Forward</button>
+  <button onclick="sendCommand('left')">Left</button>
+  <button onclick="sendCommand('right')">Right</button>
+  <button onclick="sendCommand('backward')">Backward</button>
+  <button onclick="sendCommand('stop')">Stop</button>
+
+  <!-- ✅ Load Firebase SDKs FIRST -->
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database-compat.js"></script>
+
+  <!-- ✅ Your app logic AFTER Firebase loads -->
+  <script>
+    // Wait until the window is fully loaded
+    window.addEventListener('load', function () {
+      try {
+        // ✅ Firebase config
+        const firebaseConfig = {
+          apiKey: "AIzaSyCk5RB-ubd1hVY7pf9KDVqh4X9l6H74548",
+          authDomain: "esp32car-650e7.firebaseapp.com",
+          databaseURL: "https://esp32car-650e7-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "esp32car-650e7",
+          storageBucket: "esp32car-650e7.firebasestorage.app",
+          messagingSenderId: "907772494012",
+          appId: "1:907772494012:web:63b14b8ecb1ed07e0510b9"
+        };
+
+        // ✅ Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ✅ Expose the function globally
+        window.sendCommand = function (command) {
+          database.ref('car/command').set(command)
+            .then(() => {
+              console.log('Command sent:', command);
+            })
+            .catch((error) => {
+              console.error('Error sending command:', error);
+            });
+        };
+      } catch (err) {
+        console.error("Firebase initialization failed:", err);
+      }
+    });
+  </script>
+</body>
+</html>
